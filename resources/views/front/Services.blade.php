@@ -14,6 +14,7 @@
                     <div class="col-md-4">
                         <div class="card mb-4">
                             <div class="card-body">
+                                {{-- service --}}
                                 <h5 class="card-title">Service 2</h5>
                                 <p class="card-text">Description of service 2.</p>
                             </div>
