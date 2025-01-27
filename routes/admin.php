@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,34 +14,63 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
- 
-// Route::prefix('User')->group(function () {
+Route::get('admin', 'IndexController@index')->name('login'); // for redirection purpose
+Route::name('admin.')->group(
+    function () {
 
-//     route::get('Login',[ UserController::class, 'ViewLogin'])->name('UserViewLogin');
- 
-//  // show login 
- 
-//     route::get('Register',[ UserController::class, 'ViewRegister'])->name('UserViewRegister');
- 
-//  // show data
- 
-//     route::get('data',[ UserController::class, 'ViewData'])->name('UserViewData');
- 
-//  // register data
- 
-//     route::post('Register',[UserController::class,'CreateRegister'])->name('UserCreateRegister');
- 
-//  // attemtp login
- 
-//     route::post('Login',[ UserController::class, 'LoginMatch'])->name('UserLoginMatch');
- 
-//  // Route for logging out
- 
-//     Route::post('logout', [UserController::class, 'logout'])->name('Userlogout');
-//  });
+//    	Route::get('/', 'IndexController@index');
+
+        # to show login form
+        Route::get('/auth/login', [
+            'uses'  => 'Auth\LoginController@showLoginForm',
+            'as'    => 'auth.login'
+        ]);
+
+        # login form submits to this route
+        Route::post('/auth/login', [
+            'uses'  => 'Auth\LoginController@login',
+            'as'    => 'auth.login'
+        ]);
+
+        # logs out admin user
+        # it was post method before I recieved MethodNotAllowedHttpException
+        Route::any('/auth/logout', [
+            'uses'  => 'Auth\LoginController@logout',
+            'as'    => 'auth.logout'
+        ]);
+
+        # Password reset routes
+        Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+        Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
+        Route::get('/password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+        Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+
+        # shows dashboard
+        Route::get('dashboard', [
+            'uses'  => 'DashboardController@index',
+            'as'    => 'dashboard.index'
+        ]);
+        Route::get('update-profile', 'AdministratorsController@editProfile')->name('update-profile');
+        Route::post('update-status', 'UserController@updateStatus')->name('update-status');
+
+        Route::resource('administrators', 'AdministratorsController');
+        Route::resource('site-settings', 'SiteSettingsController');
+        Route::resource('pages', 'PagesController');
+        Route::resource('media-files', 'MediaFilesController');
+        Route::resource('blog', 'BlogController');
+        Route::resource('faq', 'FaqController');
+        Route::resource('testimonial', 'TestimonialController');
+        Route::resource('coupon', 'CouponController');
+        Route::resource('contact-us', 'ContactUsController');
+        Route::resource('newsletters', 'NewsLettersController');
+        Route::resource('users', 'UserController');
+        Route::post('upload-image', [
+            'uses'  => 'IndexController@uploadImage',
+            'as'    => 'upload-image-from-editor'
+        ]);
+    }
+);
+
 
 
 
@@ -61,3 +89,6 @@ use Illuminate\Support\Facades\Route;
    
    Route::post('logout', [AdminController::class, 'logout'])->name('Adminlogout')->middleware('auth:admin');
 });
+
+
+

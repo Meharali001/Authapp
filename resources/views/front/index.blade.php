@@ -85,7 +85,7 @@
         </div>
 
         <h2 class="mt-5">Contact Us</h2>
-        <form action="{{  }}" method="post">
+        <form action="" method="post">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" class="form-control" id="name" placeholder="Your Name" required>

@@ -100,7 +100,7 @@ class UserController extends Controller
     {
         try {
             $logindata = $request->validate([
-                'email' => 'required|string|email|max:255',
+                'email' => 'required|string|email|max:255|exists:users,email',
                 'password' => 'required|string',
             ]);
     
